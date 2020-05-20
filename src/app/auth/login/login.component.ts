@@ -1,5 +1,6 @@
 import { Component, NgModule } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: '',
@@ -7,6 +8,13 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
+  constructor(public authService: AuthService) {}
+
   isLoading = false;
-  onLogin(form: NgForm) {}
+  onLogin(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+    this.authService.login(form.value.email, form.value.password);
+  }
 }

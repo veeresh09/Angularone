@@ -5,7 +5,7 @@ const postsRoutes = require("./routes/posts");
 const Post = require("./models/post");
 const app = express();
 const path = require("path");
-
+const UserRoutes = require("./routes/auth");
 mongoose
   .connect(
     "mongodb+srv://veer:egAil38MXqrifO6g@cluster0-scmgl.gcp.mongodb.net/test?retryWrites=true&w=majority",
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept,Authorization"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -34,4 +34,5 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/posts", postsRoutes);
+app.use("/api/user", UserRoutes);
 module.exports = app;
