@@ -14,8 +14,8 @@ mongoose
   .then(() => {
     console.log("Connected to MongodB");
   })
-  .catch(() => {
-    console.log("connection failed");
+  .catch((err) => {
+    console.log(err);
   });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
