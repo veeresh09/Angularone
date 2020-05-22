@@ -17,14 +17,19 @@ export class AuthService {
       email: email,
       password: password,
     };
-    this.http
+    return this.http
       .post<{ message: string; result: any }>(
         'http://localhost:3000/api/user/signup',
         User
       )
-      .subscribe((response) => {
-        this.router.navigate(['/']);
-      });
+      .subscribe(
+        (response) => {
+          this.router.navigate(['/']);
+        },
+        (error) => {
+          this.authStatusListener.next(false);
+        }
+      );
   }
   login(email: string, password: string) {
     const User: AuthData = {
@@ -36,21 +41,26 @@ export class AuthService {
         'http://localhost:3000/api/user/login',
         User
       )
-      .subscribe((response) => {
-        const token = response.token;
-        this.token = token;
-        if (token) {
-          this.isAuthenticated = true;
-          this.userId = response.userId;
-          const expiresIn = response.expiresIn;
-          this.setAuthTimer(expiresIn);
-          this.authStatusListener.next(true);
-          const now = new Date();
-          const expirationDate = new Date(now.getTime() + expiresIn * 1000);
-          this.SaveAuthData(token, expirationDate, this.userId);
-          this.router.navigate(['/']);
+      .subscribe(
+        (response) => {
+          const token = response.token;
+          this.token = token;
+          if (token) {
+            this.isAuthenticated = true;
+            this.userId = response.userId;
+            const expiresIn = response.expiresIn;
+            this.setAuthTimer(expiresIn);
+            this.authStatusListener.next(true);
+            const now = new Date();
+            const expirationDate = new Date(now.getTime() + expiresIn * 1000);
+            this.SaveAuthData(token, expirationDate, this.userId);
+            this.router.navigate(['/']);
+          }
+        },
+        (error) => {
+          this.authStatusListener.next(false);
         }
-      });
+      );
   }
   getisAuth() {
     return this.isAuthenticated;
