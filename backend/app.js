@@ -8,7 +8,9 @@ const path = require("path");
 const UserRoutes = require("./routes/auth");
 mongoose
   .connect(
-    "mongodb+srv://veer:egAil38MXqrifO6g@cluster0-scmgl.gcp.mongodb.net/test?retryWrites=true&w=majority",
+    "mongodb+srv://veer:" +
+      process.env.MONGO_ATLAS_PW +
+      "@cluster0-scmgl.gcp.mongodb.net/test?retryWrites=true&w=majority",
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
